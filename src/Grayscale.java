@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package imageprocessing;
+
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -39,8 +39,8 @@ public class Grayscale {
                 int r = (pixel >> 16) & 0xff;
                 int g = (pixel >> 8) & 0xff;
                 int b = (pixel) & 0xff;
-                int trungBinh = (r + g + b) / 3;
-                Color c = new Color(trungBinh, trungBinh, trungBinh, alpha);
+                int average = (r + g + b) / 3;
+                Color c = new Color(average, average, average, alpha);
                 int k = c.getRGB();
                 outputImage.setRGB(i, j, k);
             }

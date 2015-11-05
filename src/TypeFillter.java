@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package imageprocessing;
+
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
-/**
- *
- * @author Dao Trung Duyet
- */
-public class locFileAnh extends FileFilter {
+public class TypeFillter extends FileFilter {
     
     public boolean accept(File f)
     {

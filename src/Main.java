@@ -49,6 +49,7 @@ public class Main extends JFrame {
 	private JTextField txtCParameterInPowerLaw;
 	private JTextField txtThreshold;
 
+	private OptionForm optionForm = new OptionForm(); 
 	/**
 	 * Launch the application.
 	 */
@@ -173,6 +174,14 @@ public class Main extends JFrame {
 
 		checkboxOldLoading = new JCheckBox("Old Loading");
 		mnOption.add(checkboxOldLoading);
+		
+		JMenuItem mntmMoreOption = new JMenuItem("More Option");
+		mntmMoreOption.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				optionForm.setVisible(true); 
+			}
+		});
+		mnOption.add(mntmMoreOption);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -195,16 +204,28 @@ public class Main extends JFrame {
 				loadImageToLabel(); 
 			}
 		});
+		
+		JButton btnLineChartOfHistogram = new JButton("Line Chart");
+		btnLineChartOfHistogram.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				HistogramChart histogramChart = new HistogramChart(getInputImage()) ; 
+				histogramChart.processing(); 
+			}
+		});
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addComponent(btnHistogramEqualization)
-					.addContainerGap(1258, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnLineChartOfHistogram)
+					.addContainerGap(1171, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addComponent(btnHistogramEqualization, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+				.addGroup(Alignment.TRAILING, gl_panel.createParallelGroup(Alignment.BASELINE)
+					.addComponent(btnHistogramEqualization, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+					.addComponent(btnLineChartOfHistogram, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 
@@ -377,7 +398,45 @@ public class Main extends JFrame {
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Color.WHITE);
-		tabbedPane.addTab("New tab", null, panel_2, null);
+		tabbedPane.addTab("Spatial Filtering", null, panel_2, null);
+		
+		JButton btnCanny = new JButton("Canny");
+		btnCanny.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Canny canny = new Canny(getInputImage()) ; 
+				canny.processing(0,255);
+				outputImage = canny.getOutputImage() ; 
+				loadImageToLabel(); 
+			}
+		});
+		
+		JButton btnSobel = new JButton("Sobel");
+		btnSobel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println( optionForm.getGxMatrixInSobel());
+				
+				Sobel sobel = new Sobel(getInputImage()) ; 
+				sobel.processing(); 
+				outputImage = sobel.getOutputImage() ; 
+				loadImageToLabel(); 
+			}
+		});
+		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
+		gl_panel_2.setHorizontalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addComponent(btnCanny, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnSobel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(1209, Short.MAX_VALUE))
+		);
+		gl_panel_2.setVerticalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+					.addComponent(btnCanny, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+					.addComponent(btnSobel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+		);
+		panel_2.setLayout(gl_panel_2);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
@@ -394,8 +453,49 @@ public class Main extends JFrame {
 										.addPreferredGap(ComponentPlacement.RELATED)
 										.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
 										.addContainerGap()));
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.WHITE);
+		tabbedPane.addTab("Artistic", null, panel_3, null);
+		
+		JButton btnOilPainting = new JButton("Oil Painting");
+		btnOilPainting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OilPainting oilPainting = new OilPainting(getInputImage()) ; 
+				int radius = optionForm.geRadiusOfOilPainting() ; 
+				int intensityLevels = optionForm.geItensityLevelOfOilPainting() ; 
+				oilPainting.processing(radius, intensityLevels);
+				 outputImage = oilPainting.getOutputImage() ; 
+				 loadImageToLabel(); 
+			}
+		});
+		
+		JButton btnHalftoning = new JButton("Halftoning");
+		btnHalftoning.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Halftoning halftoning = new Halftoning(getInputImage()) ; 
+				halftoning.processing(); 
+				outputImage = halftoning.getOutputImage() ; 
+				loadImageToLabel();
+			}
+		});
+		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
+		gl_panel_3.setHorizontalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addComponent(btnOilPainting)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnHalftoning, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(1175, Short.MAX_VALUE))
+		);
+		gl_panel_3.setVerticalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addComponent(btnOilPainting, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+				.addComponent(btnHalftoning, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+		);
+		panel_3.setLayout(gl_panel_3);
 
-		lblMain.setIcon(new ImageIcon("C:\\Users\\VanNinh\\OneDrive\\Pictures\\Stay-Hungry-Stay-Foolish.jpg"));
+		lblMain.setIcon(null);
 		scrollPane.setViewportView(lblMain);
 		contentPane.setLayout(gl_contentPane);
 	}

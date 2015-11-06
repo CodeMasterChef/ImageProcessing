@@ -16,24 +16,23 @@ public class Grayscale {
 
     private BufferedImage inputImage;
     private BufferedImage outputImage;
-
-    public Grayscale(BufferedImage input) {
-        inputImage = input;
+    private int width ;
+	private int height ;
+    public Grayscale(BufferedImage parameterImage) {
+        inputImage = parameterImage;
+        width = inputImage.getWidth() ; 
+        height = inputImage.getHeight() ; 
+        outputImage = new BufferedImage( width , height , BufferedImage.TYPE_INT_ARGB);
     }
 
-    public void setInputImage(BufferedImage input) {
-        inputImage = input;
-    }
 
     public BufferedImage getOutputImage() {
         return outputImage;
     }
 
     public void processing() {
-        outputImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        int i, j;
-        for (i = 0; i < inputImage.getWidth(); i++) {
-            for (j = 0; j < inputImage.getHeight(); j++) {
+        for (int i = 0; i < width ; i++) {
+            for (int j = 0; j < height ; j++) {
                 int pixel = inputImage.getRGB(i, j);
                 int alpha = (pixel >> 24) & 0xff;
                 int r = (pixel >> 16) & 0xff;

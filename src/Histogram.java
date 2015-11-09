@@ -56,7 +56,7 @@ public class Histogram {
 			double sum = 0;
 			for (int i = 0; i < 256; i++) {
 				sum = sum + (double) histogram[channel][i]/ area;
-				int newValue = (int) (256 * sum );
+				int newValue =(int) Math.round (256.0 * sum );
 				newHistogram[channel][i] = (newValue > 255) ? 255 : newValue;
 			}
 		}

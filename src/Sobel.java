@@ -30,9 +30,7 @@ public class Sobel {
 		return outputImage;
 	}
 
-	public void processing() {
-		int[][] Gx = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
-		int[][] Gy = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
+	public void processing( int[][] gX , int[][] gY) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 
@@ -53,16 +51,16 @@ public class Sobel {
 						int b = (pi) & 0xff;
 						
 						// tiến hành nhân chập: tọa độ: 2-(k+1) = 1-k
-						pixelGx[0] += Gx[1 - k][1 - m] * r;
-						pixelGx[1] += Gx[1 - k][1 - m] * g;
-						pixelGx[2] += Gx[1 - k][1 - m] * b;
-						pixelGx[3] += Gx[1 - k][1 - m] * alpha;
+						pixelGx[0] += gX[1 - k][1 - m] * r;
+						pixelGx[1] += gX[1 - k][1 - m] * g;
+						pixelGx[2] += gX[1 - k][1 - m] * b;
+						pixelGx[3] += gX[1 - k][1 - m] * alpha;
 
 						// tiến hành nhân chập: tọa độ: 2-(k+1) = 1-k
-						pixelGy[0] += Gy[1 - k][1 - m] * r;
-						pixelGy[1] += Gy[1 - k][1 - m] * g;
-						pixelGy[2] += Gy[1 - k][1 - m] * b;
-						pixelGy[3] += Gy[1 - k][1 - m] * alpha;
+						pixelGy[0] += gY[1 - k][1 - m] * r;
+						pixelGy[1] += gY[1 - k][1 - m] * g;
+						pixelGy[2] += gY[1 - k][1 - m] * b;
+						pixelGy[3] += gY[1 - k][1 - m] * alpha;
 
 					}
 				}

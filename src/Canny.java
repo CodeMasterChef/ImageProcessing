@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -41,7 +36,7 @@ public class Canny {
 		
 		int goc[][] = new int[width][height];
 		int sum[][] = new int[width][height];
-		int sumt;
+		int sumt ;
 		for (int i = 1; i < width - 1; i++) {
 			for (int j = 1; j < height - 1; j++) {
 				sumx = (inputImage.getRGB(i - 1, j - 1) & 0xFF) * -1 + (inputImage.getRGB(i + 1, j - 1) & 0xFF) * 1
@@ -106,7 +101,7 @@ public class Canny {
 							for (q = -1; q < 2; q++) {
 								if ((i + k + lx) < width - 2 && (j + q + ly) < height - 2 && (i + k + lx) >= 0
 										&& (j + q + ly) >= 0) {
-									if (mn[i + k + lx][j + q + ly] > 0 && kq[i + k + lx][j + q + ly] == 0) {
+									if (mn[i + k + lx][j + q + ly] > low && kq[i + k + lx][j + q + ly] == 0) {
 										kq[i + k + lx][j + q + ly] = 255;
 										s1.push(k + lx);
 										s2.push(q + ly);

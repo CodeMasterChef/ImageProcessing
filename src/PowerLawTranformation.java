@@ -22,7 +22,7 @@ public class PowerLawTranformation {
 
 	}
 
-	public void processing(double r, double c) {
+	public void processing(double gama, double c) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 
@@ -32,10 +32,10 @@ public class PowerLawTranformation {
 				int red = (pi >> 16) & 0xff;
 				int green = (pi >> 8) & 0xff;
 				int blue = (pi) & 0xff;
-				double hesochuyendoi = (255/Math.pow(255, r))  ; 
-				red = 	(int) 	(Math.pow(red, r)  * c * hesochuyendoi );
-				green = (int) 	(Math.pow(green,r) * c * hesochuyendoi );
-				blue = 	(int) 	(Math.pow(blue, r) * c * hesochuyendoi );
+				double hesochuyendoi = (255/Math.pow(255, gama))  ; 
+				red = 	(int) 	(Math.pow(red, gama)  * c * hesochuyendoi );
+				green = (int) 	(Math.pow(green,gama) * c * hesochuyendoi );
+				blue = 	(int) 	(Math.pow(blue, gama) * c * hesochuyendoi );
 
 				red = (red > 255) ? 255 : red;
 				green = (green > 255) ? 255 : green;

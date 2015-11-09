@@ -26,8 +26,6 @@ public class LogarithmicTransformation {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 
-				
-
 				int pi = inputImage.getRGB(i, j);
 				int alpha = (pi >> 24) & 0xff;
 				int red = (pi >> 16) & 0xff;

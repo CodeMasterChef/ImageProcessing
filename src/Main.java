@@ -34,6 +34,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.SwingConstants;
+import java.awt.Font;
+
 
 public class Main extends JFrame {
 	/**
@@ -53,6 +55,9 @@ public class Main extends JFrame {
 	private JTextField txtPowerParameter = new JTextField();
 	private JTextField txtCParameterInPowerLaw;
 	private JSlider sliderOfGammaInPowerLaw = new JSlider();
+	private JTextField txtCParameterInLogarithmicAlgorithm;
+	private JTextField txtMinPostionInGrayLevelSlicing;
+	private JTextField txtMaxPositionInGrayLevelSlicing;
 
 	/**
 	 * Launch the application.
@@ -87,6 +92,16 @@ public class Main extends JFrame {
 		} else {
 			return inputImage;
 		}
+	}
+
+	private boolean isNullInput() {
+		if (lblMain.getIcon() == null) {
+			JOptionPane.showMessageDialog(null, "Chưa có ảnh để xử lí!", "ERROR", JOptionPane.WARNING_MESSAGE);
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	/**
@@ -148,11 +163,11 @@ public class Main extends JFrame {
 		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				if (lblMain == null) {
-					JOptionPane.showMessageDialog(null, "Chưa có thông tin để lưu ảnh!", "Lỗi",
-							JOptionPane.WARNING_MESSAGE);
-				} else {
+				
+				if(isNullInput()){
+					return ; 
+				}
+				else {
 					JFileChooser save = new JFileChooser();
 					save.setFileFilter(new TypeFillter());
 					save.setDialogTitle("Lưu ảnh");
@@ -206,6 +221,11 @@ public class Main extends JFrame {
 		JButton btnHistogramEqualization = new JButton("Equalization");
 		btnHistogramEqualization.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if (isNullInput()) {
+					return;
+				}
+				
 				Histogram histogram = new Histogram(getInputImage());
 				histogram.processing();
 				outputImage = histogram.getOutputImage();
@@ -216,6 +236,11 @@ public class Main extends JFrame {
 		JButton btnLineChartOfHistogram = new JButton("Line Chart");
 		btnLineChartOfHistogram.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+
+				
 				HistogramChart histogramChart = new HistogramChart(getInputImage());
 				histogramChart.processing();
 			}
@@ -225,10 +250,14 @@ public class Main extends JFrame {
 				.addGroup(gl_panel.createSequentialGroup().addComponent(btnHistogramEqualization)
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnLineChartOfHistogram)
 						.addContainerGap(1171, Short.MAX_VALUE)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnHistogramEqualization, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-						.addComponent(btnLineChartOfHistogram, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)));
+		gl_panel.setVerticalGroup(
+				gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel.createSequentialGroup().addContainerGap()
+								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+										.addComponent(btnHistogramEqualization, GroupLayout.DEFAULT_SIZE, 77,
+												Short.MAX_VALUE)
+								.addComponent(btnLineChartOfHistogram, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+				.addContainerGap()));
 		panel.setLayout(gl_panel);
 
 		JPanel panel_1 = new JPanel();
@@ -238,15 +267,13 @@ public class Main extends JFrame {
 		JButton btnGrayscale = new JButton("Grayscale");
 		btnGrayscale.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (lblMain.getIcon() == null) {
-					JOptionPane.showMessageDialog(null, "Chưa có ảnh để xử lí!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-				} else {
-					Grayscale grayscale = new Grayscale(getInputImage());
-					grayscale.processing();
-					outputImage = grayscale.getOutputImage();
-					loadImageToLabel();
-
+				if (isNullInput()) {
+					return;
 				}
+				Grayscale grayscale = new Grayscale(getInputImage());
+				grayscale.processing();
+				outputImage = grayscale.getOutputImage();
+				loadImageToLabel();
 
 			}
 		});
@@ -254,29 +281,29 @@ public class Main extends JFrame {
 		JButton btnThresholding = new JButton("Thresholding");
 		btnThresholding.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (lblMain.getIcon() == null) {
-					JOptionPane.showMessageDialog(null, "Chưa có ảnh để xử lí!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-				} else {
-					Thresholding thresholding = new Thresholding(getInputImage());
-					int threshold = Integer.parseInt(txtThreshold.getText());
-					thresholding.processing(threshold);
-					outputImage = thresholding.getOutputImage();
-					loadImageToLabel();
+				if (isNullInput()) {
+					return;
 				}
+
+				Thresholding thresholding = new Thresholding(getInputImage());
+				int threshold = Integer.parseInt(txtThreshold.getText());
+				thresholding.processing(threshold);
+				outputImage = thresholding.getOutputImage();
+				loadImageToLabel();
+
 			}
 		});
 
 		JButton btnNegative = new JButton("Negative ");
 		btnNegative.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (lblMain.getIcon() == null) {
-					JOptionPane.showMessageDialog(null, "Chưa có ảnh để xử lí!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-				} else {
-					Negative negative = new Negative(getInputImage());
-					negative.processing();
-					outputImage = negative.getOutputImage();
-					loadImageToLabel();
+				if (isNullInput()) {
+					return;
 				}
+				Negative negative = new Negative(getInputImage());
+				negative.processing();
+				outputImage = negative.getOutputImage();
+				loadImageToLabel();
 
 			}
 		});
@@ -284,6 +311,9 @@ public class Main extends JFrame {
 		JButton btnPowerLawTranformation = new JButton("Power law");
 		btnPowerLawTranformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
 				PowerLawTranformation powerLawTranformation = new PowerLawTranformation(getInputImage());
 				double power = Double.parseDouble(txtPowerParameter.getText());
 				double c = Double.parseDouble(txtCParameterInPowerLaw.getText());
@@ -296,8 +326,13 @@ public class Main extends JFrame {
 		JButton btnLogarithmic = new JButton("Logarithmic");
 		btnLogarithmic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
+
+				
 				LogarithmicTransformation logarithmic = new LogarithmicTransformation(getInputImage());
-				double c = Double.parseDouble(txtCParameterInPowerLaw.getText());
+				double c = Double.parseDouble(txtCParameterInLogarithmicAlgorithm.getText());
 				logarithmic.processing(c);
 				outputImage = logarithmic.getOutputImage();
 				loadImageToLabel();
@@ -314,9 +349,14 @@ public class Main extends JFrame {
 		JButton btnGrayLevelSlicing = new JButton("Gray level slicing");
 		btnGrayLevelSlicing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
+
+				
 				GrayLevelSlicing grayLevelSlicing = new GrayLevelSlicing(getInputImage());
-				int minPosition = optionForm.getMinPostionOfGrayLevelSlicingClass();
-				int maxPosition = optionForm.getMaxPostionOfGrayLevelSlicingClass();
+				int minPosition = Integer.parseInt(txtMinPostionInGrayLevelSlicing.getText());
+				int maxPosition = Integer.parseInt(txtMaxPositionInGrayLevelSlicing.getText());
 				grayLevelSlicing.processing(minPosition, maxPosition);
 				outputImage = grayLevelSlicing.getOutputImage();
 				loadImageToLabel();
@@ -330,14 +370,13 @@ public class Main extends JFrame {
 		sliderOfGammaInPowerLaw = new JSlider();
 		sliderOfGammaInPowerLaw.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				Double value = sliderOfGammaInPowerLaw.getValue() / 100.0;
+				Double value = sliderOfGammaInPowerLaw.getValue() / 10.0;
 				txtPowerParameter.setText(String.valueOf(value));
 			}
 		});
 
 		sliderOfGammaInPowerLaw.setBackground(Color.WHITE);
 		sliderOfGammaInPowerLaw.setForeground(Color.WHITE);
-		sliderOfGammaInPowerLaw.setMaximum(1000);
 
 		txtPowerParameter = new JTextField();
 		txtPowerParameter.setText("5");
@@ -346,20 +385,24 @@ public class Main extends JFrame {
 		txtCParameterInPowerLaw = new JTextField();
 		txtCParameterInPowerLaw.setText("1");
 		txtCParameterInPowerLaw.setColumns(10);
-		final JCheckBox checkBoxBitPlace0 = new JCheckBox("0");
+		final JCheckBox checkBoxBitPlace0 = new JCheckBox("7");
 		checkBoxBitPlace0.setSelected(true);
-		final JCheckBox checkBoxBitPlace1 = new JCheckBox("1");
-		final JCheckBox checkBoxBitPlace2 = new JCheckBox("2");
-		final JCheckBox checkBoxBitPlace3 = new JCheckBox("3");
-		final JCheckBox checkBoxBitPlace4 = new JCheckBox("4");
-		final JCheckBox checkBoxBitPlace5 = new JCheckBox("5");
-		final JCheckBox checkBoxBitPlace6 = new JCheckBox("6");
-		final JCheckBox checkBoxBitPlace7 = new JCheckBox("7");
+		final JCheckBox checkBoxBitPlace1 = new JCheckBox("6");
+		final JCheckBox checkBoxBitPlace2 = new JCheckBox("5");
+		final JCheckBox checkBoxBitPlace3 = new JCheckBox("4");
+		final JCheckBox checkBoxBitPlace4 = new JCheckBox("3");
+		final JCheckBox checkBoxBitPlace5 = new JCheckBox("2");
+		final JCheckBox checkBoxBitPlace6 = new JCheckBox("1");
+		final JCheckBox checkBoxBitPlace7 = new JCheckBox("0");
 
 		JButton btnBitPlaceSlicing = new JButton("Bit Place Slicing");
 		btnBitPlaceSlicing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
 
+				
 				int[] choosedBitArray = new int[8];
 				choosedBitArray[0] = (checkBoxBitPlace0.isSelected() == true) ? 1 : 0;
 				choosedBitArray[1] = (checkBoxBitPlace1.isSelected() == true) ? 1 : 0;
@@ -369,7 +412,7 @@ public class Main extends JFrame {
 				choosedBitArray[5] = (checkBoxBitPlace5.isSelected() == true) ? 1 : 0;
 				choosedBitArray[6] = (checkBoxBitPlace6.isSelected() == true) ? 1 : 0;
 				choosedBitArray[7] = (checkBoxBitPlace7.isSelected() == true) ? 1 : 0;
-			
+
 				BitPlaneSlicing bitPlaneSlicing = new BitPlaneSlicing(getInputImage());
 				bitPlaneSlicing.processing(choosedBitArray);
 				outputImage = bitPlaneSlicing.getOutputImage();
@@ -377,108 +420,161 @@ public class Main extends JFrame {
 			}
 		});
 
+		JLabel label_2 = new JLabel("C:");
+
+		txtCParameterInLogarithmicAlgorithm = new JTextField();
+		txtCParameterInLogarithmicAlgorithm.setText("1");
+		txtCParameterInLogarithmicAlgorithm.setColumns(10);
+
+		JLabel lblMin = new JLabel("Min:");
+
+		JLabel lblMax = new JLabel("Max:");
+
+		txtMinPostionInGrayLevelSlicing = new JTextField();
+		txtMinPostionInGrayLevelSlicing.setText("120");
+		txtMinPostionInGrayLevelSlicing.setColumns(10);
+
+		txtMaxPositionInGrayLevelSlicing = new JTextField();
+		txtMaxPositionInGrayLevelSlicing.setText("150");
+		txtMaxPositionInGrayLevelSlicing.setColumns(10);
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
+		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_1
+				.createSequentialGroup().addGap(6)
+				.addComponent(btnGrayscale, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE).addGap(10)
+				.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnThresholding, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel_1.createSequentialGroup().addGap(11).addComponent(lblThreshold).addGap(10)
+								.addComponent(txtThreshold, GroupLayout.PREFERRED_SIZE, 50,
+										GroupLayout.PREFERRED_SIZE)))
+				.addGap(10).addComponent(btnNegative, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(
+						gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_1.createSequentialGroup().addGap(10)
+										.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 22,
+												GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(txtCParameterInLogarithmicAlgorithm, GroupLayout.DEFAULT_SIZE, 78,
+										Short.MAX_VALUE))
+								.addComponent(btnLogarithmic, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 120,
+										Short.MAX_VALUE))
+				.addGap(18)
+				.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnGrayLevelSlicing, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+						.addGroup(gl_panel_1.createSequentialGroup()
+								.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addComponent(lblMin)
+										.addComponent(lblMax))
+								.addGap(18)
+								.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(txtMaxPositionInGrayLevelSlicing).addComponent(
+												txtMinPostionInGrayLevelSlicing))))
+				.addGap(22)
+				.addGroup(
+						gl_panel_1
+								.createParallelGroup(
+										Alignment.LEADING)
+								.addComponent(btnBitPlaceSlicing, GroupLayout.PREFERRED_SIZE, 130,
+										GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel_1.createSequentialGroup().addComponent(checkBoxBitPlace0).addGap(2)
+								.addComponent(checkBoxBitPlace1).addGap(2).addComponent(checkBoxBitPlace2).addGap(2)
+								.addComponent(checkBoxBitPlace3))
+						.addGroup(gl_panel_1.createSequentialGroup().addComponent(checkBoxBitPlace4).addGap(2)
+								.addComponent(checkBoxBitPlace5).addGap(2).addComponent(checkBoxBitPlace6).addGap(2)
+								.addComponent(checkBoxBitPlace7)))
+				.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(gl_panel_1.createSequentialGroup().addGap(53)
+								.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_panel_1.createSequentialGroup().addComponent(label_1).addGap(32)
+												.addComponent(txtCParameterInPowerLaw, GroupLayout.PREFERRED_SIZE, 45,
+														GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_panel_1.createSequentialGroup().addComponent(label)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(sliderOfGammaInPowerLaw, GroupLayout.PREFERRED_SIZE, 151,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(txtPowerParameter,
+												GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(gl_panel_1.createSequentialGroup().addGap(51).addComponent(btnPowerLawTranformation,
+								GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+				.addGap(294)));
+		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_1.createSequentialGroup()
-					.addGap(6)
-					.addComponent(btnGrayscale, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addComponent(lblThreshold)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(txtThreshold, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnThresholding, GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnNegative, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnLogarithmic, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnGrayLevelSlicing)
-					.addGap(10)
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel_1.createSequentialGroup()
-									.addComponent(checkBoxBitPlace0)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(checkBoxBitPlace1, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(checkBoxBitPlace2, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(checkBoxBitPlace3, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnBitPlaceSlicing, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(281)
-							.addComponent(btnPowerLawTranformation, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE))
+										.addComponent(btnThresholding, GroupLayout.PREFERRED_SIZE, 43,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(6)
+										.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+												.addGroup(gl_panel_1.createSequentialGroup().addGap(3)
+														.addComponent(lblThreshold))
+												.addComponent(txtThreshold, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_1.createSequentialGroup()
-							.addComponent(checkBoxBitPlace4, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(checkBoxBitPlace5, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(checkBoxBitPlace6, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(checkBoxBitPlace7, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addComponent(label, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-							.addGap(25)
-							.addComponent(sliderOfGammaInPowerLaw, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtPowerParameter, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(txtCParameterInPowerLaw, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(7))
-		);
-		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(btnGrayscale, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGroup(gl_panel_1.createSequentialGroup()
-								.addComponent(btnThresholding, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(btnLogarithmic, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-									.addComponent(txtThreshold, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblThreshold))))
-						.addGroup(gl_panel_1.createSequentialGroup()
-							.addGap(6)
-							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtPowerParameter, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_panel_1.createSequentialGroup()
-									.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-										.addComponent(label)
-										.addComponent(sliderOfGammaInPowerLaw, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-										.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtCParameterInPowerLaw, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(btnPowerLawTranformation, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_panel_1.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnBitPlaceSlicing)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-										.addComponent(checkBoxBitPlace0)
-										.addComponent(checkBoxBitPlace1)
-										.addComponent(checkBoxBitPlace2)
-										.addComponent(checkBoxBitPlace3))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-										.addComponent(checkBoxBitPlace4)
-										.addComponent(checkBoxBitPlace5)
-										.addComponent(checkBoxBitPlace6)
-										.addComponent(checkBoxBitPlace7)))))
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(btnNegative, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnLogarithmic, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-							.addComponent(btnGrayLevelSlicing, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-					.addGap(17))
-		);
+										.addComponent(btnGrayLevelSlicing, GroupLayout.DEFAULT_SIZE, 31,
+												Short.MAX_VALUE)
+										.addComponent(btnBitPlaceSlicing, GroupLayout.PREFERRED_SIZE, 27,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnPowerLawTranformation)))
+								.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_1
+										.createSequentialGroup().addGap(7)
+										.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_1
+												.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+												.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+														.addComponent(lblMin)
+														.addComponent(txtMinPostionInGrayLevelSlicing,
+																GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+														.addComponent(txtMaxPositionInGrayLevelSlicing,
+																GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(lblMax)))
+												.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+														.addComponent(txtCParameterInLogarithmicAlgorithm,
+																GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 20,
+																GroupLayout.PREFERRED_SIZE))))
+										.addGroup(gl_panel_1.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(
+														Alignment.TRAILING,
+														gl_panel_1.createParallelGroup(Alignment.TRAILING)
+																.addComponent(txtPowerParameter, Alignment.LEADING,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.PREFERRED_SIZE)
+																.addComponent(sliderOfGammaInPowerLaw,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.PREFERRED_SIZE))
+														.addGroup(Alignment.TRAILING, gl_panel_1
+																.createParallelGroup(Alignment.LEADING)
+																.addComponent(checkBoxBitPlace0)
+																.addComponent(checkBoxBitPlace1)
+																.addComponent(checkBoxBitPlace2)
+																.addGroup(gl_panel_1
+																		.createParallelGroup(Alignment.BASELINE)
+																		.addComponent(checkBoxBitPlace3)
+																		.addComponent(label))))
+												.addGap(5)
+												.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+														.addComponent(checkBoxBitPlace4).addComponent(checkBoxBitPlace5)
+														.addComponent(checkBoxBitPlace6)
+														.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+																.addComponent(checkBoxBitPlace7)
+																.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 18,
+																		GroupLayout.PREFERRED_SIZE)
+																.addComponent(txtCParameterInPowerLaw,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.PREFERRED_SIZE))))))
+						.addComponent(btnGrayscale, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+						.addComponent(btnNegative, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)).addGap(15)));
 		panel_1.setLayout(gl_panel_1);
 
 		JPanel panel_4 = new JPanel();
@@ -488,6 +584,12 @@ public class Main extends JFrame {
 		JButton btnMinFillter = new JButton("Min Fillter");
 		btnMinFillter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+
+				
+				
 				MinFilter minFilter = new MinFilter(getInputImage());
 				int sizeOfFillter = optionForm.getSizeOfFilterInMinFillterClass();
 				minFilter.processing(sizeOfFillter);
@@ -496,9 +598,13 @@ public class Main extends JFrame {
 			}
 		});
 
-		JButton btnAddSalt = new JButton("Add Salt");
+		JButton btnAddSalt = new JButton("Add Black Salt");
 		btnAddSalt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+
 				AddSalt addSalt = new AddSalt(getInputImage());
 				Double percentOfSalt = optionForm.getPercentOfSaltOfAddSaltClass();
 				addSalt.processing(percentOfSalt);
@@ -510,6 +616,10 @@ public class Main extends JFrame {
 		JButton btnMaxFillter = new JButton("Max Fillter");
 		btnMaxFillter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+				
 				MaxFilter maxFilter = new MaxFilter(getInputImage());
 				int sizeOfFillter = optionForm.getSizeOfFilterInMinFillterClass();
 				maxFilter.processing(sizeOfFillter);
@@ -522,6 +632,10 @@ public class Main extends JFrame {
 		JButton btnMedianFillter = new JButton("Median Fillter");
 		btnMedianFillter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+				
 				MedianFilter medianFilter = new MedianFilter(getInputImage());
 				int sizeOfFillter = optionForm.getSizeOfFilterInMedianFillterClass();
 				medianFilter.processing(sizeOfFillter);
@@ -534,6 +648,10 @@ public class Main extends JFrame {
 		JButton btnEverageFillter = new JButton("Everage Fillter");
 		btnEverageFillter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+				
 				EverageFilter everageFilter = new EverageFilter(getInputImage());
 				int sizeOfFillter = optionForm.getSizeOfFilterInEverageFillterClass();
 				everageFilter.processing(sizeOfFillter);
@@ -542,49 +660,48 @@ public class Main extends JFrame {
 
 			}
 		});
-		
-		JButton btnGaussian = new JButton("Gaussian");
-		btnGaussian.addActionListener(new ActionListener() {
+
+		JButton btnAddWhiteSalt = new JButton("Add White Salt");
+		btnAddWhiteSalt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Gaussian gaussian = new Gaussian(getInputImage()) ; 
-				int filterSize = optionForm.getSizeOfFilterInGaussian() ; 
-				double sigma = optionForm.getSigmaInGaussian() ; 
-				gaussian.processing(filterSize, sigma);
-				outputImage = gaussian.getOutputImage() ; 
+				if (isNullInput()) {
+					return;
+				}
+
+				AddWhiteSalt addWhiteSalt = new AddWhiteSalt(getInputImage());
+				Double percent = optionForm.getPercentOfSaltOfAddSaltClass();
+				addWhiteSalt.processing(percent);
+				outputImage = addWhiteSalt.getOutputImage();
 				loadImageToLabel();
-				
 			}
 		});
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
-		gl_panel_4.setHorizontalGroup(
-			gl_panel_4.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addComponent(btnMinFillter, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnMaxFillter, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnMedianFillter)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnEverageFillter, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnGaussian)
-					.addPreferredGap(ComponentPlacement.RELATED, 766, Short.MAX_VALUE)
-					.addComponent(btnAddSalt)
-					.addContainerGap())
-		);
-		gl_panel_4.setVerticalGroup(
-			gl_panel_4.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnAddSalt)
-					.addContainerGap(65, Short.MAX_VALUE))
+		gl_panel_4
+				.setHorizontalGroup(
+						gl_panel_4.createParallelGroup(Alignment.TRAILING)
+								.addGroup(
+										gl_panel_4.createSequentialGroup()
+												.addComponent(btnMinFillter, GroupLayout.PREFERRED_SIZE, 95,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnMaxFillter, GroupLayout.PREFERRED_SIZE, 95,
+														GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnMedianFillter)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnEverageFillter, GroupLayout.PREFERRED_SIZE, 110,
+										GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, 716, Short.MAX_VALUE).addComponent(btnAddWhiteSalt)
+				.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnAddSalt).addContainerGap()));
+		gl_panel_4.setVerticalGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_4.createSequentialGroup().addContainerGap()
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE).addComponent(btnAddSalt)
+								.addComponent(btnAddWhiteSalt))
+						.addContainerGap(65, Short.MAX_VALUE))
 				.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
-					.addComponent(btnMinFillter, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-					.addComponent(btnMaxFillter, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-					.addComponent(btnMedianFillter, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-					.addComponent(btnEverageFillter, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-					.addComponent(btnGaussian, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-		);
+						.addComponent(btnMinFillter, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+						.addComponent(btnMaxFillter, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+						.addComponent(btnMedianFillter, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnEverageFillter, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)));
 		panel_4.setLayout(gl_panel_4);
 
 		JPanel panel_2 = new JPanel();
@@ -594,9 +711,13 @@ public class Main extends JFrame {
 		JButton btnCanny = new JButton("Canny");
 		btnCanny.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
+				
 				Canny canny = new Canny(getInputImage());
-				int low = optionForm.getLowValueFromCannyClass() ; 
-				int high = optionForm.getHighValueFromCannyClass() ; 
+				int low = optionForm.getLowValueFromCannyClass();
+				int high = optionForm.getHighValueFromCannyClass();
 				canny.processing(low, high);
 				outputImage = canny.getOutputImage();
 				loadImageToLabel();
@@ -606,11 +727,14 @@ public class Main extends JFrame {
 		JButton btnSobel = new JButton("Sobel");
 		btnSobel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
 
 				Sobel sobel = new Sobel(getInputImage());
-				int[][] gX = optionForm.getGxFromSobelClass() ; 
-				int[][] gY = optionForm.getGxFromSobelClass() ; 
-				sobel.processing(gX,gY);
+				int[][] gX = optionForm.getGxFromSobelClass();
+				int[][] gY = optionForm.getGxFromSobelClass();
+				sobel.processing(gX, gY);
 				outputImage = sobel.getOutputImage();
 				loadImageToLabel();
 			}
@@ -619,29 +743,39 @@ public class Main extends JFrame {
 		JButton btnLaplaceOfGaussian = new JButton("LoG");
 		btnLaplaceOfGaussian.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
+
 				LaplaceOfGaussian log = new LaplaceOfGaussian(getInputImage());
-				outputImage = log.processing(7, 0.7);
+				int filterSize = optionForm.getSizeOfFilterInLaplaceOfGaussian();
+				double signma = optionForm.getSigmaInLaplaceOfGaussian();
+				outputImage = log.processing(filterSize, signma);
 				loadImageToLabel();
 			}
 		});
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_2.createSequentialGroup()
-					.addComponent(btnCanny, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnSobel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnLaplaceOfGaussian, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(1117, Short.MAX_VALUE))
-		);
-		gl_panel_2.setVerticalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-					.addComponent(btnCanny, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-					.addComponent(btnSobel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-					.addComponent(btnLaplaceOfGaussian, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-		);
+		gl_panel_2
+				.setHorizontalGroup(
+						gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_2.createSequentialGroup().addContainerGap()
+										.addComponent(btnCanny, GroupLayout.PREFERRED_SIZE, 73,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(btnSobel, GroupLayout.PREFERRED_SIZE, 74,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnLaplaceOfGaussian,
+												GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap(1107, Short.MAX_VALUE)));
+		gl_panel_2
+				.setVerticalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+								.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+										.addComponent(btnCanny, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+										.addComponent(btnSobel, GroupLayout.PREFERRED_SIZE, 86,
+												GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnLaplaceOfGaussian, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+				.addContainerGap()));
 		panel_2.setLayout(gl_panel_2);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -659,49 +793,53 @@ public class Main extends JFrame {
 										.addPreferredGap(ComponentPlacement.RELATED)
 										.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
 										.addContainerGap()));
-		
+
 		JPanel panel_5 = new JPanel();
 		panel_5.setBackground(Color.WHITE);
 		tabbedPane.addTab("Morphology", null, panel_5, null);
-		
-		JButton btnEroson = new JButton("Eroson");
-		btnEroson.addActionListener(new ActionListener() {
+
+		JButton btnErosion = new JButton("Erosion");
+		btnErosion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Eroson eroson = new Eroson(getInputImage()) ; 
-				int kernelSize = optionForm.getKernelSizeInErosonClass() ; 
+				if (isNullInput()) {
+					return;
+				}
+
+				Erosion eroson = new Erosion(getInputImage());
+				int kernelSize = optionForm.getKernelSizeInErosonClass();
 				eroson.processing(kernelSize);
-				outputImage = eroson.getOutputImage() ; 
+				outputImage = eroson.getOutputImage();
 				loadImageToLabel();
 			}
 		});
-		
+
 		JButton btnDilation = new JButton("Dilation");
 		btnDilation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Dilation dilation = new Dilation(getInputImage()) ; 
-				int kernelSize = optionForm.getKernelSizeOfDilasionClass() ; 
+				if (isNullInput()) {
+					return;
+				}
+
+				Dilation dilation = new Dilation(getInputImage());
+				int kernelSize = optionForm.getKernelSizeOfDilasionClass();
 				dilation.processing(kernelSize);
-				outputImage = dilation.getOutputImage() ; 
+				outputImage = dilation.getOutputImage();
 				loadImageToLabel();
 			}
 		});
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
-		gl_panel_5.setHorizontalGroup(
-			gl_panel_5.createParallelGroup(Alignment.LEADING)
+		gl_panel_5.setHorizontalGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
-					.addComponent(btnEroson, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDilation, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(1171, Short.MAX_VALUE))
-		);
-		gl_panel_5.setVerticalGroup(
-			gl_panel_5.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnErosion, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnDilation, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(1171, Short.MAX_VALUE)));
+		gl_panel_5.setVerticalGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_5.createSequentialGroup()
-					.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnEroson, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-						.addComponent(btnDilation, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
+						.addGroup(gl_panel_5.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnErosion, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+								.addComponent(btnDilation, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
+				.addContainerGap()));
 		panel_5.setLayout(gl_panel_5);
 
 		JPanel panel_3 = new JPanel();
@@ -711,6 +849,11 @@ public class Main extends JFrame {
 		JButton btnOilPainting = new JButton("Oil Painting");
 		btnOilPainting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (isNullInput()) {
+					return;
+				}
+
+				
 				OilPainting oilPainting = new OilPainting(getInputImage());
 				int radius = optionForm.geRadiusOfOilPainting();
 				int intensityLevels = optionForm.geItensityLevelOfOilPainting();
@@ -720,10 +863,14 @@ public class Main extends JFrame {
 			}
 		});
 
-		JButton btnHalftoning = new JButton("Halftoning");
-		btnHalftoning.addActionListener(new ActionListener() {
+		JButton btnHalftoningWithErrorDiffustion = new JButton("Halftoning with error diffusion");
+		btnHalftoningWithErrorDiffustion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Halftoning halftoning = new Halftoning(getInputImage());
+				if (isNullInput()) {
+					return;
+				}
+
+				HalftoningWithErrorDiffsion halftoning = new HalftoningWithErrorDiffsion(getInputImage());
 				halftoning.processing();
 				outputImage = halftoning.getOutputImage();
 				loadImageToLabel();
@@ -733,6 +880,10 @@ public class Main extends JFrame {
 		JButton btnPatterning = new JButton("Patterning");
 		btnPatterning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+
 				Patterning patterning = new Patterning(getInputImage());
 				patterning.processing();
 				outputImage = patterning.getOutputImage();
@@ -740,20 +891,70 @@ public class Main extends JFrame {
 
 			}
 		});
+
+		JButton btnGaussianBlur = new JButton("Gaussian Blur");
+		btnGaussianBlur.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+
+				Gaussian gaussian = new Gaussian(getInputImage());
+				int filterSize = optionForm.getSizeOfFilterInGaussian();
+				double signma = optionForm.getSigmaInGaussian();
+				gaussian.processing(filterSize, signma);
+				outputImage = gaussian.getOutputImage();
+				loadImageToLabel();
+
+			}
+		});
+		
+		JButton btnHalftoningWithCircleDots = new JButton("Halftoning with circle dots");
+		btnHalftoningWithCircleDots.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (isNullInput()) {
+					return;
+				}
+				HalftioningWithCircleDots halftioning = new HalftioningWithCircleDots(getInputImage()) ; 
+				halftioning.processing(); 
+				outputImage = halftioning.getOutputImage() ; 
+				loadImageToLabel();
+			}
+		});
+		
+		JLabel lblHalftoning = new JLabel("Halftoning:");
+		lblHalftoning.setFont(new Font("Arial", Font.PLAIN, 14));
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
-		gl_panel_3
-				.setHorizontalGroup(
-						gl_panel_3.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_3.createSequentialGroup().addComponent(btnOilPainting)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(btnHalftoning, GroupLayout.PREFERRED_SIZE, 81,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnPatterning)
-										.addContainerGap(1086, Short.MAX_VALUE)));
-		gl_panel_3.setVerticalGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-				.addComponent(btnOilPainting, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-				.addComponent(btnHalftoning, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-				.addComponent(btnPatterning, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE));
+		gl_panel_3.setHorizontalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addComponent(btnOilPainting)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnPatterning)
+					.addGap(14)
+					.addComponent(btnGaussianBlur)
+					.addGap(18)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnHalftoningWithCircleDots, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnHalftoningWithErrorDiffustion, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblHalftoning))
+					.addGap(860))
+		);
+		gl_panel_3.setVerticalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+					.addComponent(btnOilPainting, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+					.addComponent(btnGaussianBlur, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+					.addComponent(btnPatterning, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblHalftoning)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnHalftoningWithCircleDots)
+					.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+					.addComponent(btnHalftoningWithErrorDiffustion, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
 		panel_3.setLayout(gl_panel_3);
 		lblMain.setForeground(Color.WHITE);
 		lblMain.setBackground(Color.WHITE);

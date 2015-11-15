@@ -1,5 +1,10 @@
 import org.jfree.chart.ChartPanel;
 
+import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.ui.ApplicationFrame;
@@ -38,6 +43,15 @@ public class LineChart_AWT extends ApplicationFrame {
 		this.pack();
 		RefineryUtilities.centerFrameOnScreen(this);
 		this.setVisible(true);
+		// this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+	}
+
+	public void windowClosing(final WindowEvent evt) {
+		if (evt.getWindow() == this) {
+			dispose();
+
+		}
 	}
 
 }

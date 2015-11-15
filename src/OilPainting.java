@@ -34,10 +34,10 @@ public class OilPainting {
 
 	public void processing(int radius, int intensityLevels) {
 
-		int averageR[] = new int[intensityLevels + 1];
-		int averageG[] = new int[intensityLevels + 1];
-		int averageB[] = new int[intensityLevels + 1];
-		int intensityCount[] = new int[intensityLevels + 1];
+		int averageR[] = new int[intensityLevels+1];
+		int averageG[] = new int[intensityLevels+1];
+		int averageB[] = new int[intensityLevels+1];
+		int intensityCount[] = new int[intensityLevels+1];
 
 		for (int x = 0; x < width; x++) { // for (each pixel)
 			int left = Math.max(0, x - radius);

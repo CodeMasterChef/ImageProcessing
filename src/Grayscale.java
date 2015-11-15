@@ -38,7 +38,11 @@ public class Grayscale {
                 int r = (pixel >> 16) & 0xff;
                 int g = (pixel >> 8) & 0xff;
                 int b = (pixel) & 0xff;
-                int average = (r + g + b) / 3;
+                
+       
+               int average = (r + g + b) / 3;
+              //  int average = (int) (0.299*r + 0.587 * g + 0.114 * b ); 
+                
                 Color c = new Color(average, average, average, alpha);
                 int k = c.getRGB();
                 outputImage.setRGB(i, j, k);
